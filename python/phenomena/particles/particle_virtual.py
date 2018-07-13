@@ -8,15 +8,19 @@ from particletools.tables import PYTHIAParticleData
 pythia = PYTHIAParticleData()
 
 NO_PARENT = -1
-class ParticleVirtual(ParticleBoosted):
+class ParticleVirtual(object):
 
+
+class VirtualChannel(object):
     def __init__(self, name, parent = NO_PARENT, **kwargs):
-        super(ParticleVirtual, self).__init__(name, parent, **kwargs)
+        self._load_xml()
 
-        if len(self.decay) == 3:
-            self._load_xml()
-        else:
-            pass
+        limits = self._set_limits(mass,masses)
+        self._set_channel_choice(limits)
+        if self._virtualp._name != []:
+            self._set_mass(masses,self._virtualp._mass)
+            self._set_virtual_decay(decay)
+
 
 
     def _load_xml(self):
@@ -129,3 +133,78 @@ class ParticleVirtual(ParticleBoosted):
 
 
         print('Fiesta!')
+
+
+
+    def _set_mass_limits(mass,masses):
+        return {
+                    '12' : [masses[0]+masses[1],mass-masses[2]],
+                    '13' : [masses[0]+masses[2],mass-masses[1]],
+                    '23' : [masses[1]+masses[2],mass-masses[0]],
+                }
+
+    def _set_BW_mass(self,mass,limits):
+        # Use self._virtualp._name
+        # Mass
+        virtual_mass =
+
+        self._virtualp._mass = virtual_mass
+
+    def _set_channel_choice(self,decay,limits):
+
+        #Choose channel
+        self._is_virtual = []
+        # In general we can used
+        chnum = []
+        for particle in self._is_virtual
+            if self._is_virtual(particle) == 1:
+                chnum.append(str(self._is_virtual(paticle+1)))
+        channel = ''.join(chnum)
+        # For this specific 3 particle case, it might be simpler to use:
+        # if self._is_virtual(0)==0:
+        #     channel = '23'
+        # elif self._is_virtual(1)==0:
+        #     channel = '13'
+        # else:
+        #     channel = '12'
+
+        virtual_particle = []
+        # We must set the virtual particle name (could be empty) and then flag which masses will come from the virtual particle
+
+        virtual_mass = self._set_BW_mass(virtual_particle_mass)
+
+        # We set the threshold for no virtual decay if the virtual mass is on the lower end of our distribution
+        # This way, it's more probable to see a virtual particle when we're close
+        if virtual_mass => (limits[channel][0]+limits[channel][1])/2
+            self._virtualp._name = virtual_particle
+            self._virtualp._mass = virtual_mass
+            self._virtualp._realmass = virtual_particle_mass
+        else:
+            self._virtualp._name = []
+
+
+    def _set_mass(self,masses,virtual_mass):
+
+        vrt_masses = []
+        new_masses = []
+        for particle in self._is_virtual
+            if self._is_virtual[particle] == 1:
+                vrt_masses.append(masses[particle])
+            else:
+                new_masses.append(masses[particle])
+        new_masses.append(virtual_mass)
+        self._virtualp._masses = vrt_masses
+        self._masses = new_masses
+
+
+    def _set_virtual_decay(self,decay):
+        vrt_decay = []
+        new_decay = []
+        for particle in self._is_virtual
+            if self._is_virtual[particle] == 1:
+                vrt_decay.append(decay[particle])
+            else:
+                new_decay.append(decay[particle])
+        new_decay.append(self._virtualp._name)
+        self._virtualp._vrtdecay = vrt_decay
+        self._decay = new_decay
