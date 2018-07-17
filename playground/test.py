@@ -2,7 +2,6 @@ from __future__ import print_function
 import sys
 import unittest
 import numpy as np
-from skhep.simulation import pdgid
 
 python_path = 'C:\Users\Santi\Documents\GitHub\particle-muzic\python'
 sys.path.append(python_path)
