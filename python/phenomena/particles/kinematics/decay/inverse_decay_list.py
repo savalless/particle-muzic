@@ -25,6 +25,8 @@ class InverseDecayList(Object):
         k2 = pythia.pdg_id(p2)
         ids = [k1,k2]
 
+        combs = []
+
         tags = [str(ids[0]),str(-ids[1])]
         tagsR = [str(-ids[1]),str(ids[0])]
         tagsbar = [str(-ids[0]), str(ids[1])]
@@ -33,33 +35,8 @@ class InverseDecayList(Object):
             if parent.tag == 'particle':
                 for channel in parent:
                     if channel.attrib['products'] == ' '.join(tags[0]) or channel.attrib['products'] == ' '.join(tagsR[0]):
-                        combs['01'].append(parent.attrib['name'])
-                        masses[parent.attrib['name']]=parent.attrib['m0']
-                    if channel.attrib['products'] == ' '.join(tags[1]) or channel.attrib['products'] == ' '.join(tagsR[1]):
-                        combs['02'].append(parent.attrib['name'])
-                        masses[parent.attrib['name']]=parent.attrib['m0']
-                    if channel.attrib['products'] == ' '.join(tags[2]) or channel.attrib['products'] == ' '.join(tagsR[2]):
-                        combs['03'].append(parent.attrib['name'])
-                        masses[parent.attrib['name']]=parent.attrib['m0']
-                    if channel.attrib['products'] == ' '.join(tags[3]) or channel.attrib['products'] == ' '.join(tagsR[3]):
-                        combs['12'].append(parent.attrib['name'])
-                    if channel.attrib['products'] == ' '.join(tags[4]) or channel.attrib['products'] == ' '.join(tagsR[4]):
-                        combs['13'].append(parent.attrib['name'])
-                    if channel.attrib['products'] == ' '.join(tags[5]) or channel.attrib['products'] == ' '.join(tagsR[5]):
-                        combs['23'].append(parent.attrib['name'])
-
+                        combs.append(parent.attrib['name'])
                     if channel.attrib['products'] == ' '.join(tagsbar[0]) or channel.attrib['products'] == ' '.join(tagsbarR[0]):
-                        combs['01'].append(parent.attrib['antiName'])
-                        masses[parent.attrib['antiName']]=parent.attrib['m0']
-                    if channel.attrib['products'] == ' '.join(tagsbar[1]) or channel.attrib['products'] == ' '.join(tagsbarR[1]):
-                        combs['02'].append(parent.attrib['antiName'])
-                        masses[parent.attrib['antiName']]=parent.attrib['m0']
-                    if channel.attrib['products'] == ' '.join(tagsbar[2]) or channel.attrib['products'] == ' '.join(tagsbarR[2]):
-                        combs['03'].append(parent.attrib['antiName'])
-                        masses[parent.attrib['antiName']]=parent.attrib['m0']
-                    if channel.attrib['products'] == ' '.join(tagsbar[3]) or channel.attrib['products'] == ' '.join(tagsbarR[3]):
-                        combs['12'].append(parent.attrib['antiName'])
-                    if channel.attrib['products'] == ' '.join(tagsbar[4]) or channel.attrib['products'] == ' '.join(tagsbarR[4]):
-                        combs['13'].append(parent.attrib['antiName'])
-                    if channel.attrib['products'] == ' '.join(tagsbar[5]) or channel.attrib['products'] == ' '.join(tagsbarR[5]):
-                        combs['23'].append(parent.attrib['antiName'])
+                        combs.append(parent.attrib['antiName'])
+
+        self._virtual_list = combs
