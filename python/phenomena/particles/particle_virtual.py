@@ -66,7 +66,7 @@ class VirtualChannel(object):
         import xml.etree.ElementTree as ET
         import os
 
-        base = os.path.dirname(os.path.abspath(__file__))
+        base = 'C:\Users\PC\Anaconda2\envs\IFAE\Lib\site-packages\particletools'
         searchpaths = (base + '/ParticleData.xml', 'ParticleData.xml',
                        '../ParticleData.xml',
                        'ParticleDataTool/ParticleData.xml')
