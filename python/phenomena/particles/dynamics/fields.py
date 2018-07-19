@@ -7,7 +7,7 @@ class field(object):
         self._set_field_E()
 
     def _set_field_B(self):
-        self.B = Vector3D(0,0,500)
+        self.B = Vector3D(0,0,10)
 
     def _set_field_E(self):
         self.E = Vector3D(0,0,0)

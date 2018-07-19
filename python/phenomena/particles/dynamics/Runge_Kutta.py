@@ -1,39 +1,38 @@
-
-
+from skhep.math.vectors import Vector3D
+from phenomena.particles.dynamics.forces import TotalAcc
 
 class RK4(object):
-    def __init__(self):
-        self._set_x()
-        self._set_y()
-        self._set_z()
-        self._set_px()
-        self._set_py()
-        self._set_pz()
+    def __init__(self, p, v, d, E, delta_t, charge, mass, name):
+        self.init_pos = p
+        self.init_vel = v
+        self.total_d = d
+        self.init_E = E
+        self.delta_t = delta_t
+        self.charge = charge
+        self.mass = mass
+        self.name = name
+        self._RK4()
 
-    def _RK4(self, p, v, a, delta_t):
-        z1 = (aux(p[0], v[0], 1, delta_t), aux(p[1], v[1], 1, delta_t))
-        vz1 = (aux(v[0], a[0], 1, delta_t), aux(v[1], a[1], 1, delta_t))
+    def _RK4(self):
+        self.acc = TotalAcc(self.init_vel, self.total_d, self.init_E, self.charge, self.mass, self.name).acc
+        z1 = Vector3D(self.aux(self.init_pos.x, self.init_vel.x, 1), self.aux(self.init_pos.y, self.init_vel.y, 1), self.aux(self.init_pos.z, self.init_vel.z, 1))
+        vz1 = Vector3D(self.aux(self.init_vel.x, self.acc.x, 1), self.aux(self.init_vel.y, self.acc.y, 1), self.aux(self.init_vel.z, self.acc.z, 1))
 
-        k1 = SolarSystem.Newton(z1[0], z1[1])
-        z2 = (aux(p[0], vz1[0], 1, delta_t), aux(p[1], vz1[1], 1, delta_t))
-        vz2 = (aux(v[0], k1[0], 1, delta_t), aux(v[1], k1[1], 1, delta_t))
+        k1 = TotalAcc(vz1, self.total_d, self.init_E, self.charge, self.mass, self.name).acc
+        z2 = Vector3D(self.aux(self.init_pos.x, vz1.x, 1), self.aux(self.init_pos.y, vz1.y, 1), self.aux(self.init_pos.z, vz1.z, 1))
+        vz2 = Vector3D(self.aux(self.init_vel.x, k1.x, 1), self.aux(self.init_vel.y, k1.y, 1), self.aux(self.init_vel.z, k1.z, 1))
 
-        k2 = SolarSystem.Newton(z2[0], z2[1])
-        z3 = (aux(p[0], vz2[0], 3, delta_t), aux(p[1], vz2[1], 3, delta_t))
-        vz3 = (aux(v[0], k2[0], 3, delta_t), aux(v[1], k2[1], 3, delta_t))
+        k2 = TotalAcc(vz2, self.total_d, self.init_E, self.charge, self.mass, self.name).acc
+        z3 = Vector3D(self.aux(self.init_pos.x, vz2.x, 3), self.aux(self.init_pos.y, vz2.y, 3), self.aux(self.init_pos.z, vz2.z, 3))
+        vz3 = Vector3D(self.aux(self.init_vel.x, k2.x, 3), self.aux(self.init_vel.y, k2.y, 3), self.aux(self.init_vel.z, k2.z, 3))
 
-        k3 = SolarSystem.Newton(z3[0], z3[1])
-        x = p[0] + delta_t / 6 * (v[0] + 2 * vz1[0] + 2 * vz2[0] + vz3[0])
-        y = p[1] + delta_t / 6 * (v[1] + 2 * vz1[1] + 2 * vz2[1] + vz3[1])
-        vx = v[0] + delta_t / 6 * (a[0] + 2 * k1[0] + 2 * k2[0] + k3[0])
-        vy = v[1] + delta_t / 6 * (a[1] + 2 * k1[1] + 2 * k2[1] + k3[1])
+        k3 = TotalAcc(vz3, self.total_d, self.init_E, self.charge, self.mass, self.name).acc
+        self.pos = self.init_pos + self.delta_t / 6 * (self.init_vel + 2 * vz1 + 2 * vz2 + vz3)
+        self.vel = self.init_vel + self.delta_t / 6 * (self.acc + 2 * k1 + 2 * k2 + k3)
 
-
-    def _forces(self):
-        
-
-
-
-
-
-        kk
+    def aux(self, a, b, c):
+        if c == 1:  #This is used for the z1, z2, vz1 and vz2 functions
+            z = a + self.delta_t * b / 2
+        else:       #This is used for the z3 and vz3 functions
+            z = a + self.delta_t * b
+        return z
