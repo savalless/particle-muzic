@@ -33,12 +33,6 @@ class ParticleBoosted(ParticleDT):
         name = argv[0].get('name')
         mass = argv[0].get('mass')
 
-        try:  # Particle decay channel chosen
-            self._decay = argv[0].get('decay')
-        except:
-            self._set_decay_channels()
-            self._set_decay()
-
         self._set_name(name)  # Name of the particle pypdt convention
         self._set_id() # Class Counter
         self._set_pdgid(name) # Id from PDG, taken from pypdt
@@ -47,6 +41,15 @@ class ParticleBoosted(ParticleDT):
         self._set_lifetime() # Lifetime of the particle, taken from pypdt
         # Virtual particles have lifetimes that are too short, so we make them large. This can be changed to a more realistic approach
         self._lifetime *= 5.e9 #!!CHECK!!#
+
+        try:  # Particle decay channel chosen
+            self._decay = argv[0].get('decay')
+        except:
+            self._set_decay_channels()
+            self._deactivate_decay_channels() # for virtual particles, not all channels are allowed
+            self._renorm_decay_channels() # remaining channels must have the probability renormalized
+            self._set_decay()
+
         self._set_type() # Particle Type will always be virtual
         self._set_composition() # Particle quark compsition in format [[q1,q2],[q3,q4],...] taken from json.
         self._set_lifetime_ren() #Renormalization of the lifetime THIS SHOULD BE DONE AT THE NODES and brought back with callback
@@ -99,6 +102,21 @@ class ParticleBoosted(ParticleDT):
 
         self._theta = kwargs.get('theta',0)
         self.decayvalues = DecayCalc(self._mass,self._gamma,self._theta,self._decay).values # sets values for decay particles
+
+    def _deactivate_decay_channels(self):
+        new_decay_channels = []
+        for part in self._decay_channels:
+            masses = [pythia.mass(self._decay_channels[part][1][x]) for x in self._decay_channels[part][1]]
+            if sum(masses) <= self._mass:
+                new_decay_channels.append(self._decay_channels[part])
+
+        self._decay_channels = new_decay_channels
+
+    def _renorm_decay_channels(self):
+        total = sum(self._decay_channels[:]][0])
+        for index in range(len(self._decay_channels)):
+            self._decay_channels[index][0]*=(1/total)
+
 
     @property
     def p(self):
