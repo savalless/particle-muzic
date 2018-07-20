@@ -66,7 +66,7 @@ class VirtualChannel(object):
         import xml.etree.ElementTree as ET
         import os
 
-        base = 'C:\Users\Santi\Anaconda2\envs\py27\Lib\site-packages\particletools'
+        base = 'C:\Users\Sergi\Anaconda2\Lib\site-packages\particletools'
 
         searchpaths = (base + '/ParticleData.xml', 'ParticleData.xml',
                        '../ParticleData.xml',
