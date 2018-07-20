@@ -67,6 +67,7 @@ class VirtualChannel(object):
         import os
 
         base = 'C:\Users\Santi\Anaconda2\envs\py27\Lib\site-packages\particletools'
+
         searchpaths = (base + '/ParticleData.xml', 'ParticleData.xml',
                        '../ParticleData.xml',
                        'ParticleDataTool/ParticleData.xml')
