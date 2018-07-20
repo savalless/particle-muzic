@@ -45,7 +45,7 @@ class CollisionChannel(object):
             self._virtual_width.append(GeVfm/pythia.ctau(particle)*1e-15*100.0)
             decay = pythia.decay_channels(particle)
             for option in decay:
-                if pythia._particle_data.name2id(p1) and pythia._particle_data.name2id(p2) in option[1]:
+                if pythia._particle_data.name2id(p1) in option[1] and pythia._particle_data.name2id(p2) in option[1]:
                     self._virtual_b_rat.append(option[0])
                     print(option[0])
 
