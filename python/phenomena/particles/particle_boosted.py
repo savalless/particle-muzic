@@ -56,7 +56,6 @@ class ParticleBoosted(ParticleDT):
         self._set_composition() # Particle quark compsition in format [[q1,q2],[q3,q4],...] taken from json.
         self._set_lifetime_ren() #Renormalization of the lifetime THIS SHOULD BE DONE AT THE NODES and brought back with callback
         self._set_time_to_decay()  # Particle time lived before decay, renormalized
-        self._setParent(self._parent)
 
         self._setVirtualBoostedParameters(kwargs)
         # increase lifetime by gamma factor
