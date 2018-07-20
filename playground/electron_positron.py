@@ -9,6 +9,8 @@ sys.path.append(python_path)
 from phenomena.particles.particle_boosted import ParticleBoosted
 from phenomena.particles.particle import ParticleDT
 from phenomena.particles.kinematics.collision.collision_channel import CollisionChannel
+from phenomena.particles.kinematics.collision.collision_calculations import CollisionCalc
+from phenomena.particles.particle import ParticleDT
 
 class MyTest(unittest.TestCase):
     def test(self):
@@ -21,6 +23,13 @@ class MyTest(unittest.TestCase):
         for particle in range(len(channels._cross_section)):
             print(channels._virtual_list[particle],'\t',channels._cross_section[particle])
         print(channels._channel)
+        self._particles = [part1,part2]
+        self._channel = channels._channel
+        self._momenta = [1,1]
+        self._angles = [0,np.pi]
+        self._masses = [ParticleDT.getmass(particle) for particle in self._particles]
+
+        self._values = CollisionCalc(self._particles,self._channel,self._momenta,self._angles).values
 
         # collision = ParticleCollision(Energy,ImpactPar,part1,part2)
 
@@ -28,19 +37,17 @@ class MyTest(unittest.TestCase):
         # print(collision.virtual['p'])
         # print(collision.virtual['E'])
 
-        # p = [0]
-        # theta = [0]
-        # En = [collision.E]
-        # for particle in collision.decayvalues:
-        #     p.append(particle['p'])
-        #     theta.append(particle['theta'])
-        #     En.append(particle['E'])
-        #
-        # px = p * np.cos(theta)
-        # py = p * np.sin(theta)
-        #
-        # self.assertEqual(round(sum(px[1:]), 5), round(px[0], 5))
-        # self.assertEqual(round(sum(py[1:]), 5), round(py[0], 5))
-        # self.assertEqual(round(sum(En[1:]), 5), round(En[0], 5))
+        px = [self._values['p'] * np.cos(self._values['theta'])]
+        py = [self._values['p'] * np.sin(self._values['theta'])]
+        En = [self._values['E']]
+        for index in range(len(self._particles)):
+            px.append(self._momenta[index]*np.cos(self._angles[index]))
+            py.append(self._momenta[index]*np.sin(self._angles[index]))
+            En.append((self._momenta[index]**2+self._masses[index]**2)**(1/2))
+
+
+        self.assertEqual(round(sum(px[1:]), 5), round(px[0], 5))
+        self.assertEqual(round(sum(py[1:]), 5), round(py[0], 5))
+        self.assertEqual(round(sum(En[1:]), 5), round(En[0], 5))
 
 unittest.main()
