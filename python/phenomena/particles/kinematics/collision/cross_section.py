@@ -14,4 +14,4 @@ class CrossSection(object): # This warrants a class since the calculations will 
 
             self._cross_section = coeff / denom
         else:
-            self._cross_section = 0 # This is because a massless channel is somehow alloed (such as a photon) and it's not compatible
+            self._cross_section = 0 # This is because a massless channel is sometimes allowed (such as a photon) before it's removed

@@ -3,6 +3,8 @@ import os
 from particletools.tables import PYTHIAParticleData
 pythia = PYTHIAParticleData()
 
+# Finds all possible parents for a pair of particles. Works for getting the possible outcomes of a collision
+# or the possible virtual particles in a decay if one of the particles is changed for its antiparticle
 class InverseDecayList(object):
 
     def __init__(self,p1,p2):

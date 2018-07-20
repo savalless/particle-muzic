@@ -7,8 +7,7 @@ import nbodycollision
 
 class Col2BodyCalc(nbodycollision.LabCalc):
 
-    def __init__(self,particles,virtual,momenta,angles,masses):
-        self._decay = virtual
+    def __init__(self,particles,momenta,angles,masses):
         self._inc_particles = particles
         inc_energies = self._set_energies(momenta,masses)
         # From here on, all calculations are for outgoing particle ('virtual')
@@ -50,7 +49,6 @@ class Col2BodyCalc(nbodycollision.LabCalc):
 
     def _set_values(self):
         return  {
-                    'name': self._decay,
                     'p': self._p,
                     'theta': self._theta,
                     'E': self._pExyz['E'],

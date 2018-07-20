@@ -8,6 +8,8 @@ from phenomena.particles.particle_virtual import VirtualChannel
 from phenomena.particles import ParticleDT
 from phenomena.particles.kinematics.collision.cross_section import CrossSection
 
+# Chooses the channel of "decay" after a two particle collision. If no impact parameter is given, sets the possible decays but doesn't choose
+# We can set a biased probability of decay if we want to observe rare decays more often in line 29-30
 class CollisionChannel(object):
 
     def __init__(self,p1,p2,energy,*argv):

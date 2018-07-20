@@ -12,13 +12,15 @@ from phenomena.particles.kinematics.collision.collision_channel import Collision
 from phenomena.particles.kinematics.collision.collision_calculations import CollisionCalc
 from phenomena.particles.particle import ParticleDT
 
+# Test for different parts of the electron positron collision implementation
 class MyTest(unittest.TestCase):
     def test(self):
         part1 = 'e-'
         part2 = 'e+'
-        energy = 1.02 # Square root of s in GeV
+        energy = 1.0 # Square root of s in GeV
         impact = 1.e-6 # In mb
 
+        # Gets the decay channel
         channels = CollisionChannel(part1,part2,energy,impact)
         for particle in range(len(channels._cross_section)):
             print(channels._virtual_list[particle],'\t',channels._cross_section[particle])
@@ -29,6 +31,7 @@ class MyTest(unittest.TestCase):
         self._angles = [0,np.pi]
         self._masses = [ParticleDT.getmass(particle) for particle in self._particles]
 
+        # Calculates the outgoing particle momentum and energy
         self._values = CollisionCalc(self._particles,self._channel,self._momenta,self._angles).values
 
         # collision = ParticleCollision(Energy,ImpactPar,part1,part2)
@@ -37,6 +40,7 @@ class MyTest(unittest.TestCase):
         # print(collision.virtual['p'])
         # print(collision.virtual['E'])
 
+        # Check energy and momenta conservation
         px = [self._values['p'] * np.cos(self._values['theta'])]
         py = [self._values['p'] * np.sin(self._values['theta'])]
         En = [self._values['E']]

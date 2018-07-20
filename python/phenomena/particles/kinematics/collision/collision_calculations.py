@@ -7,7 +7,7 @@ import six
 from phenomena.particles.particle import ParticleDT
 from phenomena.particles.kinematics.collision._2bodycollision import Col2BodyCalc
 
-
+# Fetches de masses of incoming particles in PDG data and manages the calculation for a collision. Only 2-body collision is implemented
 class CollisionCalc(object):
     """ Checks number of collision particles and assigns appropriate calculation.
         Creates array of values:
@@ -15,7 +15,7 @@ class CollisionCalc(object):
             - values of outgoing particle = [{'name':, 'p':, 'theta':},]
     """
 
-    def __init__(self, particles, virtual, momenta, angles):
+    def __init__(self, particles, momenta, angles):
         self._decay = virtual # For processing it later on, we consider the virtual product to be a decay
         self._momenta = momenta
         self._setMassArray(particles)
@@ -33,7 +33,7 @@ class CollisionCalc(object):
 
         self._masses = masses
 
-    def _setCalculation(self, particles, virtual, momenta, angles, masses):
+    def _setCalculation(self, particles, momenta, angles, masses):
         if len(particles) == 2:
             self._values = Col2BodyCalc(particles,virtual,momenta,angles,masses).values
         else:
