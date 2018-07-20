@@ -113,7 +113,9 @@ class ParticleBoosted(ParticleDT):
         self._decay_channels = new_decay_channels
 
     def _renorm_decay_channels(self):
-        total = sum(self._decay_channels[:]][0])
+        total = 0
+        for particle in self._decay_channels:
+            total += sum(particle[0])
         for index in range(len(self._decay_channels)):
             self._decay_channels[index][0]*=(1/total)
 
