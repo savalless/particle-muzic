@@ -16,6 +16,7 @@ class Dynamics(object):
         self.init_vel = particle._beta * Vector3D(np.cos(self.init_theta), np.sin(self.init_theta), 0) * c
         self.init_E = particle._E
         self.init_p = particle._p
+        self.decay_time = particle.decay_time
         assert self.init_E == boostParams.E_from_p(self.init_vel.mag / c, self.init_p)
         self.charge = particle.charge
         self.mass = particle.mass
@@ -33,12 +34,13 @@ class Dynamics(object):
         t = 0
         h = 0.001
         while t <= tmax:
+            if t >= self.decay_time: break
             pos1 = pos.copy()
             vel1 = vel.copy()
             RK = RK4(pos, vel, d, self.init_E, h, self.charge, self.mass, self.name)
             pos = RK.pos
             vel = RK.vel
-            d = abs(pos.mag - pos1.mag)
+            d += abs(pos.mag - pos1.mag)
             assert vel1.mag >= vel.mag
             self.array_pos = np.append(self.array_pos, [pos], axis = 0)
             t += h
