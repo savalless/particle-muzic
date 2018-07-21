@@ -26,10 +26,10 @@ class CollisionChannel(object):
         try: # If an impact is given we choose an option for the collision
             impact = argv[0]
             self._set_available_channels(self._virtual_list,self._cross_section,impact)
-            # self._set_probabilities(self._cross_section) # For unbiased probabilities
-            self._set_biased_probabilities(self._cross_section)  #For biased probabilities (we will see unlikely decays more often)
+            self._set_probabilities(self._cross_section) # For unbiased probabilities
+            # self._set_biased_probabilities(self._cross_section)  #For biased probabilities (we will see unlikely decays more often)
             self._set_channel(self._virtual_list,self._probabilities)
-            print(self._channel)
+            print('\nChosen channel is:\t',self._channel)
         except: # Otherwise Channel is empty and we will decide the channel later on
             self._set_channel([],1)
 
@@ -65,7 +65,7 @@ class CollisionChannel(object):
         available_cross = []
         available_list = []
         for index, area in enumerate(cross_section):
-            if area >= impact:
+            if area >= impact and area!= 0:
                 available_cross.append(area)
                 available_list.append(virtual_list[index])
 
@@ -89,7 +89,6 @@ class CollisionChannel(object):
 
     def _set_channel(self,channel_list,probabilities):
         list_decay = []
-        print(channel_list)
         if channel_list != []:
             choice_param = self._build_weights(probabilities)
             choice = self._weighted_choice(choice_param[0],choice_param[1])

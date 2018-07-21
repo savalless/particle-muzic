@@ -20,7 +20,7 @@ class CollisionCalc(object):
 
         self._setMassArray(particles)
 
-        self._setCalculation(particles, self._masses, args)
+        self._setCalculation(particles, self._masses, *args)
 
 
     def _setMassArray(self,particles):

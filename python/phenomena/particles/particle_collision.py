@@ -6,7 +6,7 @@ from particle import Particle, ParticleDT, toDictionary
 from particletools.tables import PYTHIAParticleData
 pythia = PYTHIAParticleData()
 
-from phenomena.particles.kinematics.collision.collision_calculations import CollisionCalc, CollisionCMCalc
+from phenomena.particles.kinematics.collision.collision_calculations import CollisionCalc
 from phenomena.particles.kinematics.collision.collision_channel import CollisionChannel
 from phenomena.particles.particle_boosted import ParticleBoosted
 from phenomena.particles.kinematics.parameters import boostParams
@@ -24,10 +24,10 @@ NO_PARENT = -1
 class ParticleCollision(ParticleBoosted):
     c= 299792458 #m/s
 
-    def __init__(part1,part2,*args,**kwargs):
+    def __init__(self,part1,part2, *args, **kwargs):
 
         # Momenta and angles are initialized inside this argument check. Also raises specific error codes if arguments don't match
-        self._check_args(args,kwargs)
+        self._check_args(*args,**kwargs)
 
         self._inc_particles = [part1,part2]
         self._set_name(part1)
@@ -46,14 +46,14 @@ class ParticleCollision(ParticleBoosted):
         self._collision_decay()
         self._setParent(NO_PARENT)
 
-        if self._E == None:
-            self._values = CollisionCalc(self._inc_particles,self._momenta,self._angles).values
-            self._setBoostedParameters('p'=self._momenta[0],'theta'=self._angles[0])
-            self._decay[0]['mass'] = self._values['mass']
+        if self._CMenergy == None:
+            self.decayvalues = CollisionCalc(self._inc_particles,self._momenta,self._angles).values
+            self._setBoostedParameters({'p':self._momenta[0],'theta':self._angles[0]})
         else:
-            self._values = CollisionCalc(self._inc_particles,self._E).values
-            self._setBoostedParameters('E'=self._values['E'])
-            self._decay[0]['mass'] = self._E
+            self.decayvalues = CollisionCalc(self._inc_particles,self._CMenergy).values
+            self._E = self.decayvalues['E1'] # In this case we make an extra calculation for the incoming particle energy
+            self._setBoostedParameters({'E':self._E})
+        self._decay[0]['mass'] = self.decayvalues['mass']
         # CollisionChannel without an impact parameter should never be used here, as it leaves the choice of channel open. It will be useful
         # when checking whether there is a collision through classes other than particle_collision
         self._decay[0]['name'] = CollisionChannel(part1,part2,self._decay[0]['mass'],self._impact).channel
@@ -63,18 +63,18 @@ class ParticleCollision(ParticleBoosted):
         self._lifetime *= self._gamma
 
     def _check_args(self,*args,**kwargs):
-        self._E = kwargs.get('E',None)
+        self._CMenergy = kwargs.get('E',None)
         self._impact = kwargs.get('impact',0)
-        if E == None:
+        if self._CMenergy == None:
             try:
                 p1 = args[0]
                 theta1 = args[1]
                 try:
                     p2 = args[2]
-                    theta = args[2]
+                    theta2 = args[3]
                 except:
                     p2 = 0
-                    theta = 0
+                    theta2 = 0
                 self._momenta = [p1,p2]
                 self._angles = [theta1, theta2]
             except:
@@ -84,7 +84,7 @@ class ParticleCollision(ParticleBoosted):
 
 
     def _collision_decay(self): # We want the collision to happen even if its lifetime is infinite
-        if self._time_to_decay = ParticleDT.STABLE:
+        if self._time_to_decay == ParticleDT.STABLE:
             self._time_to_decay = 0.6
 
     def _setBoostedParameters(self,kwargs):
