@@ -3,13 +3,10 @@ import abc
 class CMCalc(object):
     __metaclass__ = abc.ABCMeta
 
-    @abc.abstractmethod
-    def E(energy,masses):
-        """Returns list of child virtual particle energy"""
-
-    @abc.abstractmethod
-    def P():
-        """Returns list of child virtual particle momentum"""
+    @abc.abstractproperty
+    def values(self):
+        """Returns list of dictonaries of parent particles' momentum, angle and energy"""
+        pass
 
 
 class LabCalc(object):
@@ -17,5 +14,5 @@ class LabCalc(object):
 
     @abc.abstractproperty
     def values(self):
-        """Returns list of dictonaries of child particles momentum, angle and energy"""
+        """Returns list of dictonaries of child particle's momentum, angle and energy"""
         pass

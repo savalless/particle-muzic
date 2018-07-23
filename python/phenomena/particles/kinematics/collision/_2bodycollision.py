@@ -5,10 +5,34 @@ from phenomena.particles.kinematics.parameters import boostParams
 
 import nbodycollision
 
-class Col2BodyCalc(nbodycollision.LabCalc):
+# This class gets the parameters of the outgoing particle in a CM scenario when given the energy of the system plus the energy
+# of the incoming particles
+class CM2ColCalc(nbodycollision.CMCalc):
 
-    def __init__(self,particles,virtual,momenta,angles,masses):
-        self._decay = virtual
+    def __init__(self,particles,energy,masses):
+
+        en1 = (energy**2+masses[0]**2-masses[1]**2)/2*energy
+        en2 = (energy**2-masses[0]**2+masses[1]**2)/2*energy
+        self._values = self._set_values()
+
+    def _set_values(self):
+        return  {
+                    'p': 0,
+                    'theta': 0,
+                    'E': energy,
+                    'mass': energy,
+                    'E1': en1,
+                    'E2': en2
+                }
+
+    @property
+    def values(self):
+        return self._values
+
+# This class gets the parameters for the outgoing particle given the momenta and angles of incoming particles
+class Lab2ColCalc(nbodycollision.LabCalc):
+
+    def __init__(self,particles,momenta,angles,masses):
         self._inc_particles = particles
         inc_energies = self._set_energies(momenta,masses)
         # From here on, all calculations are for outgoing particle ('virtual')
@@ -50,7 +74,6 @@ class Col2BodyCalc(nbodycollision.LabCalc):
 
     def _set_values(self):
         return  {
-                    'name': self._decay,
                     'p': self._p,
                     'theta': self._theta,
                     'E': self._pExyz['E'],
