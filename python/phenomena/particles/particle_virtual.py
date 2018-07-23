@@ -192,8 +192,8 @@ class VirtualChannel(object):
             if poss in ['Z0','W+','W-']:
                 min2 = [poss, masses[poss]]
                 break
-            if poss == poss1[-1]:
-                min1.append(min(mposs1))
+            if poss == poss2[-1]:
+                min1.append(min(mposs2))
 
         if len(min2)>2:
             n = random.randint(0,len(min2)-2)
@@ -219,8 +219,8 @@ class VirtualChannel(object):
             if poss in ['Z0','W+','W-']:
                 min3 = [poss, masses[poss]]
                 break
-            if poss == poss1[-1]:
-                min1.append(min(mposs1))
+            if poss == poss3[-1]:
+                min1.append(min(mposs3))
 
         if len(min3)>2:
             n = random.randint(0,len(min3)-2)
