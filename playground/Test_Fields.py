@@ -8,12 +8,13 @@ python_path = 'C:\Users\Santi\Documents\GitHub\particle-muzic\python'
 sys.path.append(python_path)
 from phenomena.particles.dynamics.MyDynamics import Dynamics
 from phenomena.particles.particle_boosted import ParticleBoosted
+from phenomena.time_master import *
 
 class MyTest(unittest.TestCase):
     def test(self):
         vel = Vector3D(0, 5., 0)
         pos = Vector3D(3., 0, 0)
-        sol = Dynamics(pos, ParticleBoosted('mu+', p=10))
+        sol = BubbleChamber([ParticleBoosted('mu+', p=1, x=5, y=8, z=0), ParticleBoosted('mu-', p=1, x=6, y=3, z=0)])
 
 
 

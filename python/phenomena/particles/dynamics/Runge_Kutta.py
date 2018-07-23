@@ -3,6 +3,8 @@ from phenomena.particles.dynamics.forces import TotalAcc
 
 class RK4(object):
     def __init__(self, p, v, d, E, delta_t, charge, mass, name):
+        assert type(p) is Vector3D
+        assert type(v) is Vector3D
         self.init_pos = p
         self.init_vel = v
         self.total_d = d

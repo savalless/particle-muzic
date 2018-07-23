@@ -2,6 +2,7 @@ from __future__ import division
 import math, random
 import collections
 import six
+from skhep.math.vectors import Vector3D
 
 from particle import Particle, ParticleDT, toDictionary
 
@@ -86,6 +87,7 @@ class ParticleBoosted(ParticleDT):
 
     def _setBoostedParameters(self,kwargs):
         self._params = boostParams(self._name,p=kwargs.get('p',None),E=kwargs.get('E',None)) # sets boosted parameters for this instance
+        self._pos = Vector3D(kwargs.get('x',0), kwargs.get('y',0), kwargs.get('z',0))
         self._p = self._params.p
         self._E = self._params.E
         self._gamma = self._params.gamma
@@ -96,6 +98,7 @@ class ParticleBoosted(ParticleDT):
 
     def _setVirtualBoostedParameters(self,kwargs): # Regular boosted parameters fetches de mass from pdg. For virtual particles it's the wrong mass
         self._p = kwargs.get('p',None)
+        self._pos = Vector3D(kwargs.get('x',0), kwargs.get('y',0), kwargs.get('z',0))
         self._gamma = boostParams.gamma_from_p(self.mass,self._p)
         self._beta =  boostParams.beta_from_gamma(self._gamma)
         self._E = boostParams.E_from_p(self._beta,self._p)

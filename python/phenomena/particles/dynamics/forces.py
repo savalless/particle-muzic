@@ -35,8 +35,8 @@ class DragForce(object):
         self._set_DragForce()
 
     def _set_DragForce(self):
-        #assert self.vel.mag <= c
-        self.F = self.vel.unit() * 100
+        assert self.vel.mag <= c
+        self.F = self.vel.unit() * 10000
 
 
 
