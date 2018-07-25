@@ -10,12 +10,11 @@ import nbodycollision
 class CM2ColCalc(nbodycollision.CMCalc):
 
     def __init__(self,particles,energy,masses):
+        en1 = (energy**2+masses[0]**2-masses[1]**2)/(2*energy)
+        en2 = (energy**2-masses[0]**2+masses[1]**2)/(2*energy)
+        self._values = self._set_values(en1,en2,energy)
 
-        en1 = (energy**2+masses[0]**2-masses[1]**2)/2*energy
-        en2 = (energy**2-masses[0]**2+masses[1]**2)/2*energy
-        self._values = self._set_values()
-
-    def _set_values(self):
+    def _set_values(self,en1,en2,energy):
         return  {
                     'p': 0,
                     'theta': 0,
