@@ -16,12 +16,14 @@ class VirtualChannel(object):
         self._decay = decay
         self._virtualp = {}
         limits = self._set_mass_limits(mass,masses)
-        self._set_channel_choice(decay, limits)
-        if self._virtualp['name'] != []:
-            self._set_mass(masses,self._virtualp['mass'])
-            self._set_virtual_decay(decay)
-            self._decay[-1] = self._virtualp
-            #In the place of the virtual particle we have a tuple with name in [0], mass in [1] and decay in [2],[3]
+        k = random.random()
+        if k < 0.5:
+            self._set_channel_choice(decay, limits)
+            if self._virtualp['name'] != []:
+                self._set_mass(masses,self._virtualp['mass'])
+                self._set_virtual_decay(decay)
+                self._decay[-1] = self._virtualp
+                #In the place of the virtual particle we have a tuple with name in [0], mass in [1] and decay in [2],[3]
 
     def _set_mass_limits(self,mass,masses):
         return {
@@ -66,7 +68,7 @@ class VirtualChannel(object):
         import xml.etree.ElementTree as ET
         import os
 
-        base = 'C:\Users\Sergi\Anaconda2\Lib\site-packages\particletools'
+        base = 'C:\Users\Santi\Anaconda2\envs\py27\Lib\site-packages\particletools'
 
         searchpaths = (base + '/ParticleData.xml', 'ParticleData.xml',
                        '../ParticleData.xml',
@@ -134,21 +136,26 @@ class VirtualChannel(object):
                     if channel.attrib['products'] == ' '.join(tags[5]) or channel.attrib['products'] == ' '.join(tagsR[5]):
                         combs['23'].append(parent.attrib['name'])
 
+                    try:
+                        par = parent.attrib['antiName']
+                    except:
+                        par = parent.attrib['name']
+
                     if channel.attrib['products'] == ' '.join(tagsbar[0]) or channel.attrib['products'] == ' '.join(tagsbarR[0]):
-                        combs['01'].append(parent.attrib['antiName'])
-                        masses[parent.attrib['antiName']]=parent.attrib['m0']
+                        combs['01'].append(par)
+                        masses[par]=parent.attrib['m0']
                     if channel.attrib['products'] == ' '.join(tagsbar[1]) or channel.attrib['products'] == ' '.join(tagsbarR[1]):
-                        combs['02'].append(parent.attrib['antiName'])
-                        masses[parent.attrib['antiName']]=parent.attrib['m0']
+                        combs['02'].append(par)
+                        masses[par]=parent.attrib['m0']
                     if channel.attrib['products'] == ' '.join(tagsbar[2]) or channel.attrib['products'] == ' '.join(tagsbarR[2]):
-                        combs['03'].append(parent.attrib['antiName'])
-                        masses[parent.attrib['antiName']]=parent.attrib['m0']
+                        combs['03'].append(par)
+                        masses[par]=parent.attrib['m0']
                     if channel.attrib['products'] == ' '.join(tagsbar[3]) or channel.attrib['products'] == ' '.join(tagsbarR[3]):
-                        combs['12'].append(parent.attrib['antiName'])
+                        combs['12'].append(par)
                     if channel.attrib['products'] == ' '.join(tagsbar[4]) or channel.attrib['products'] == ' '.join(tagsbarR[4]):
-                        combs['13'].append(parent.attrib['antiName'])
+                        combs['13'].append(par)
                     if channel.attrib['products'] == ' '.join(tagsbar[5]) or channel.attrib['products'] == ' '.join(tagsbarR[5]):
-                        combs['23'].append(parent.attrib['antiName'])
+                        combs['23'].append(par)
 
         poss1 = list(set(combs['01']).intersection(combs['23']))
         mposs1 = []
