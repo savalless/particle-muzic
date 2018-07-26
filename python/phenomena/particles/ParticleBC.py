@@ -11,26 +11,43 @@ from phenomena.particles.kinematics.collisionBC.collision_channel import Collisi
 from phenomena.particles.kinematics.collisionBC.collision_calculations import CollisionCalc
 from phenomena.particles.particle_collisionBC import ParticleCollision
 
-
+NO_PARENT = -1
 class ParticleBC(object):
-    def __init__(self, particle, **kwargs):
-        self.part1 = particle
-        self.m1 = pythia.mass(self.part1)
+    def __init__(self, *args, **kwargs):
+        try:
+            self._parent = argv[1]
+        except:
+            self._parent = NO_PARENT
+
+        self.part1 = args[0]
+        try:
+            self.m1 = pythia.mass(self.part1)
+        except:
+            self.m1 = self.part1.get('mass')
         self._set_part2()
-        self._set_args(**kwargs)
+        self._set_args(kwargs)
         self.E = (self.p ** 2 + self.m1 ** 2) ** (1/2.)
-        self.collision = ParticleCollision(self.part1,self.part2,self.p,self.theta)
+        self.collision = ParticleCollision(self._parent,self.part1,self.part2,p=self.p,theta=self.theta)
 
 
     def _set_part2(self):
         k = random.random()
-        if k < 0.5:
+        self.isCollision = True
+        if self.part1 == 'gamma' and k < 0.5:
+            self.part2 = 'e-'
+        elif self.part1 == 'gamma':
+            self.part2 = 'p+'
+        elif self.part1 == 'e-':
             self.part2 = 'e-'
         else:
-            self.part2 = 'p+'
-        self.m2 = pythia.mass(self.part2)
+            self.part2 = None
+            self.isCollision = False
+        try:
+            self.m2 = pythia.mass(self.part2)
+        except:
+            pass
 
 
-    def _set_args(self, **kwargs):
+    def _set_args(self, kwargs):
         self.p = kwargs.get('p',None)
         self.theta = kwargs.get('theta',0)

@@ -24,11 +24,17 @@ NO_PARENT = -1
 class ParticleCollision(ParticleBoosted):
     c= 299792458 #m/s
 
-    def __init__(self,part1,part2, *args, **kwargs):
-
+    def __init__(self,parent,part1,part2, **kwargs):
         # Momenta and angles are initialized inside this argument check. Also raises specific error codes if arguments don't match
-        self._check_args(*args,**kwargs)
+        self._check_args(kwargs)
 
+        if part2 != None:
+            self._init_Col(parent, part1,part2, kwargs)
+        else:
+            super(ParticleCollision, self).__init__(part1, parent, p=self._momenta[0], theta=self._angles[0])
+
+
+    def _init_Col(self, parent, part1, part2, kwargs):
         self._inc_particles = [part1,part2]
         self._set_name(part1)
         self._set_id() # Class Counter
@@ -44,7 +50,7 @@ class ParticleCollision(ParticleBoosted):
         self._set_lifetime_ren() #Renormalization of the lifetime THIS SHOULD BE DONE AT THE NODES and brought back with callback
         self._set_time_to_decay()  # Particle time lived before decay, renormalized
         self._collision_decay()
-        self._setParent(NO_PARENT)
+        self._setParent(parent)
 
         if self._CMenergy == None:
             self.decayvalues = CollisionCalc(self._inc_particles,self._momenta,self._angles).values
@@ -61,23 +67,18 @@ class ParticleCollision(ParticleBoosted):
 
         self._lifetime *= self._gamma
 
-    def _check_args(self,*args,**kwargs):
+    def _check_args(self, kwargs):
         self._CMenergy = kwargs.get('E',None)
         self._impact = kwargs.get('impact',0)
         if self._CMenergy == None:
-            try:
-                p1 = args[0]
-                theta1 = args[1]
-                try:
-                    p2 = args[2]
-                    theta2 = args[3]
-                except:
-                    p2 = 0
-                    theta2 = 0
-                self._momenta = [p1,p2]
-                self._angles = [theta1, theta2]
-            except:
-                print('If no energy ("'"E"'"= X GeV) is provided, at least one particle must have momentum')
+            p1 = kwargs.get('p',None)
+            theta1 = kwargs.get('theta',0)
+            p2 = 0
+            theta2 = 0
+
+            self._momenta = [p1,p2]
+            self._angles = [theta1, theta2]
+
         else:
             print('Momentum will be calculated with given energy in a centre of mass scenario')
 
