@@ -78,14 +78,7 @@ class ParticleBoosted(ParticleDT):
         if len(self._decay) == 3:
             self._decay = VirtualChannel(self._decay,self.mass, self._masses, self.name)._decay
         #the decay particles and masses have been reset inside ParticleVirtual if necessary
-
         #calculate and assign boosted parameters
-        self._setBoostedParameters(kwargs)
-
-        # increase lifetime by gamma factor
-        self._lifetime *= self._gamma
-
-    def _setBoostedParameters(self,kwargs):
         self._params = boostParams(self._name,p=kwargs.get('p',None),E=kwargs.get('E',None)) # sets boosted parameters for this instance
         self._pos = Vector3D(kwargs.get('x',0), kwargs.get('y',0), kwargs.get('z',0))
         self._p = self._params.p
@@ -95,6 +88,9 @@ class ParticleBoosted(ParticleDT):
         self._T = self._params.T
 
         self.decayvalues = DecayCalc(self._mass,self._gamma,self._theta,self._decay).values # sets values for decay particles
+
+        # increase lifetime by gamma factor
+        self._lifetime *= self._gamma
 
     def _setVirtualBoostedParameters(self,kwargs): # Regular boosted parameters fetches de mass from pdg. For virtual particles it's the wrong mass
         self._p = kwargs.get('p',None)
