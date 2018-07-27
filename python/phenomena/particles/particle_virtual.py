@@ -18,12 +18,17 @@ class VirtualChannel(object):
         limits = self._set_mass_limits(mass,masses)
         k = random.random()
         if k < 0.5:
-            self._set_channel_choice(decay, limits)
-            if self._virtualp['name'] != []:
-                self._set_mass(masses,self._virtualp['mass'])
-                self._set_virtual_decay(decay)
-                self._decay[-1] = self._virtualp
-                #In the place of the virtual particle we have a tuple with name in [0], mass in [1] and decay in [2],[3]
+            try:
+                self._set_channel_choice(decay, limits)
+                if self._virtualp['name'] != []:
+                    self._set_mass(masses,self._virtualp['mass'])
+                    self._set_virtual_decay(decay)
+                    self._decay[-1] = self._virtualp
+                    #In the place of the virtual particle we have a tuple with name in [0], mass in [1] and decay in [2],[3]
+
+            except AssertionError:
+                pass
+
 
     def _set_mass_limits(self,mass,masses):
         return {
@@ -200,7 +205,7 @@ class VirtualChannel(object):
                 min2 = [poss, masses[poss]]
                 break
             if poss == poss2[-1]:
-                min1.append(min(mposs2))
+                min2.append(min(mposs2))
 
         if len(min2)>2:
             n = random.randint(0,len(min2)-2)
@@ -247,6 +252,9 @@ class VirtualChannel(object):
         else:
             weights = self._set_weights(fp)
             fd = self._weighted_choice(fp, weights)
+
+        print(fd)
+        assert fd != None
 
         chnum = []
         for ind in range(len(self._decay)):
