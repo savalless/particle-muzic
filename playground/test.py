@@ -3,21 +3,22 @@ import sys
 import unittest
 import numpy as np
 
-python_path = 'C:\Users\Sergi\Desktop\IFAE\particle-muzic\python'
+python_path = 'C:\Users\Santi\Documents\GitHub\particle-muzic\python'
 sys.path.append(python_path)
 
 from phenomena.particles.particle_boosted import ParticleBoosted
-from phenomena.particles.particle import ParticleDT
+from phenomena.particles.ParticleBC import ParticleBC
 
 #Santi was here
 
 class MyTest(unittest.TestCase):
     def test(self):
 #        part = ParticleBoosted({'name':'W+', 'mass':500, 'decay':['mu+', 'nu_mubar']}, p=1)
-        part = ParticleBoosted('mu+')
+        part = ParticleBoosted('eta')
         p = [part.p]
         theta = [part.theta]
         En = [part.E]
+        print(part.decayvalues)
         for particle in part.decayvalues:
             p.append(particle['p'])
             theta.append(particle['theta'])
