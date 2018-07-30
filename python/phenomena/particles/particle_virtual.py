@@ -253,7 +253,6 @@ class VirtualChannel(object):
             weights = self._set_weights(fp)
             fd = self._weighted_choice(fp, weights)
 
-        print(fd)
         assert fd != None
 
         chnum = []

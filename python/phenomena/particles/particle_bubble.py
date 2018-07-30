@@ -26,7 +26,10 @@ class ParticleBC(object):
             self.m1 = self.part1.get('mass')
         self._set_part2()
         self._set_args(kwargs)
-        self.E = (self.p ** 2 + self.m1 ** 2) ** (1/2.)
+        if self.p != None:
+            self.E = (self.p ** 2 + self.m1 ** 2) ** (1/2.)
+        else:
+            self.E = self.m1
         self.collision = ParticleCollision(self._parent,self.part1,self.part2,p=self.p,theta=self.theta)
 
 
